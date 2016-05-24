@@ -8,7 +8,7 @@ I didn't add a database to store the test-case created (since it was the jsperf'
 Instead I choose to save the current test-case in `localStorage` and the ability to **export** it. 
 
 __________________________
-#####What I used to realize it:
+#####What I used:
  - [benchmarkjs](https://benchmarkjs.com/): which sould be used by jsperf too
  - [Blob pages](https://developer.mozilla.org/en-US/docs/Web/API/Blob): used to create local pages for testing on runtime
  
