@@ -1,0 +1,217 @@
+
+*{  -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+         -o-box-sizing: border-box;
+            box-sizing: border-box; }
+
+ body{
+ 	font-family: Tahoma,Verdana,Segoe,sans-serif;
+    font-size: 13px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+ }
+
+#jsp-head{
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #f4f4f4;
+    box-shadow: 0 0 0 10px #f4f4f4, 0 0 0 11px #ddd;
+}
+
+#jsp-logo{
+	position: relative;
+    display: inline-block;
+    padding: 20px;
+    font-size: 50px;
+    font-family:  sans-serif;
+    font-weight: 900;
+    background: #fb0;
+    color: #fff;
+    border-radius: 0px;
+    box-shadow: inset 0 0 0 5px #fff, 0 1px 2px rgba(0,0,0,0.4);
+    text-shadow: 0 1px 1px rgba(0,0,0,.2);
+}
+#jsp-logo::after{
+	content: 'performance';
+    position: absolute;
+    left: calc( 100% + 20px );
+    color: #333;
+    text-shadow: none;
+    font-weight: normal;
+    font-style: oblique;
+}
+
+#test-container{
+	background: #f4f4f4;
+    position: relative;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.2);
+}
+
+#test-controls{
+	text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+#test-stuff{
+	padding: 15px;
+}
+#test-stuff textarea.code{
+	margin: 0 0 -1px 0;
+}
+
+
+#panel-load textarea.code{
+	display: inline-block;
+	width: 70%;
+}
+
+#panel-load ul{
+    display: inline-block;
+    position: relative;
+    width: 30%;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+    _border: 1px solid #aaa;
+    _border-right: 0;
+    box-shadow: inset 0 0 0 1px #aaa;
+    margin-right: -1px;
+    min-height: 26px;
+    background: #eee;
+}
+#panel-load ul li{
+    list-style: none;
+    padding: 4px 5px;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+}
+#panel-load ul li:not(:first-child) {
+    box-shadow: inset 0 1px rgba(0,0,0,.2);
+}
+#panel-load ul li:hover{
+    background: #55d;
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
+}
+#panel-load ul li p{
+    margin: 0;
+    padding: 0;
+    width: calc( 100% - 15px);
+    overflow: hidden;
+    display: inline-block;
+}
+#panel-load ul li span{
+	position: absolute;
+    color: #d55;
+    right: 0;
+    padding: 0px 5px;
+}
+#panel-load ul li span:hover{
+    color: #f77;
+}
+
+
+.fa{ font-size: 12px; }
+
+.btn{
+    background: linear-gradient(180deg, #fff, #eee);
+    color: #333;
+    padding: 8px 14px;
+    border-radius: 1px;   
+    margin-right: -1px;
+    border: 0;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.3);
+    outline: none !important;
+    cursor: pointer;
+    position: relative;
+}
+.btn:hover{
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.5), inset 0 0 0 100px rgba(255,255,255,.1);
+    z-index: 1;
+}
+.btn.btn-primary{
+    background: linear-gradient(180deg, #77e, #55d);
+    text-shadow: 0 1px rgba(0,0,0,.3);
+    color: #fff;
+}
+.btn.btn-primary:hover{
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.5), inset 0 0 0 100px rgba(0,0,0,.1);
+}
+
+.center{
+	max-width: 600px;
+    display: table;
+    width: 100%;
+    margin: auto;
+}
+
+.collapse-toggler{
+	margin-bottom: 10px; 
+	display: inline-block;
+}
+.collapse-toggler:hover + .collapsable{
+	box-shadow: 0 0 0 5px #fff, 0 0 0 7px #55d;
+}
+
+.test-panel{
+	position: fixed;
+	display: none;
+	width: calc( 100vw - 100px);
+    max-height: calc( 100vh - 100px);
+    top: 50px;
+    overflow: auto;
+	left: 50px;
+	background: #fff;
+    box-shadow: 0 0 0 10000px rgba(0,0,0,.7), 0 0 2px rgba(0,0,0,.8);
+	border-radius: 2px;
+	padding: 15px;
+	text-align: right;
+	z-index: 1000;
+}
+
+.case{
+	position: relative;
+	display: block;
+	padding: 15px;
+}
+.case .title{
+	display: block;
+	width: 100%;
+    margin-bottom: -1px;
+	padding: 6px;
+	border: 0px none;
+	box-shadow: inset 0px 0px 0px 1px #AAA;
+}
+.case .code, textarea.code{
+	display: block;
+	width: 100%;
+    resize: vertical;
+	min-height: 100px;
+	margin: 0 0 -1px 0;
+	padding: 6px;
+    font-family: monospace;
+    font-size: 12px;
+    border: 0px none;
+	box-shadow: inset 0px 0px 0px 1px #AAA;
+}
+input.code{
+	display: block;
+	width: 100%;
+	padding: 6px;
+    font-family: monospace;
+    font-size: 12px;
+    border: none;
+	box-shadow: 0px 0px 0px 1px #AAA;
+}
+
+textarea.code:focus{
+    position: relative;
+    z-index: 10;
+}
+.case button{
+	display: inline-block;
+    padding: 7px 10px;
+}

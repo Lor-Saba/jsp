@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JS Performance</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name='description' content='JsPerf-like application'>
+	<meta name='copyright' content='Lor-Saba'>
+	<meta name='author' content='Lor-Saba'>
+	<!-- <meta content="/droplogo.png" itemprop="image"> -->
+	
+	<link rel='profile' href='https://github.com/Lor-Saba'>
+	<link rel='shortcut icon' type='image/ico' href='favicon.ico'>
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	
+	<script type="text/javascript" src="js/main.js"></script>
+	<!--
+		<script type="text/javascript" src="https://rawgit.com/lodash/lodash/4.12.0/dist/lodash.js"></script>
+		<script type="text/javascript" src="https://rawgit.com/bestiejs/benchmark.js/2.1.0/benchmark.js"></script>
+	-->
+
+</head>
+<body>
+	<div id="jsp-head"><div id="jsp-logo">JS</div></div>
+
+	<div>
+		<div id="test-stuff" class='center'>
+			<a class="collapse-toggler" href="javascript:void(0);" onclick="collapseArea('stuff');">Show / Hide setup area..</a>
+			<div class="collapsable collapse-stuff">
+				<textarea class="code test-initialhtml" placeholder="HTML code compiled inside the <body> at the beginning" spellcheck="false"></textarea>
+				<textarea class="code test-precase" 	placeholder="JAVASCRIPT code compiled/called before each test loop" spellcheck="false"></textarea>
+				<textarea class="code test-postcase" 	placeholder="JAVASCRIPT code compiled/called after each test loop"  spellcheck="false"></textarea>
+			</div>
+		</div>
+		<div id="test-container" class='center'></div>
+		<div id="test-controls" class='center'>
+			<button class="btn" onclick="showPanel('save');">SAVE</button>
+			<button class="btn" onclick="buildLoad();">LOAD</button>
+			|
+			<button class="btn" onclick="buildExport();">EXPORT</button>
+			|
+			<button class="btn" onclick="addTestCase();">ADD</button>
+			<button class="btn btn-primary" onclick="runTests();">RUN</button>
+		</div>
+
+		<div id="panel-export" class="test-panel">
+			<textarea class="code" spellcheck="false"></textarea>
+		</div>
+
+		<div id="panel-save" class="test-panel">
+			<input class="code" placeholder="Type the name of this test to save." spellcheck="false"/>
+			<button class="btn" onclick="saveCurrentToStorage(this.parentElement.querySelector('input.code').value)">OK</button>
+		</div>
+
+		<div id="panel-load" class="test-panel">
+			<ul class="tests-list"></ul>
+			<textarea class="code" spellcheck="false"></textarea>
+			<button class="btn" onclick="loadFromJson(this.parentElement.querySelector('textarea.code').value)">OK</button>
+		</div>
+	</div>
+
+	<i class="fa fa-fa" aria-hidden="true" style="width:0px;height:0px;opacity:0;display:inline-block">
+	<script type="text/javascript">init();</script>
+</body>
+</html>
+
+
+
