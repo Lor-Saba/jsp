@@ -13,9 +13,6 @@ __________________________
  - [Blob pages](https://developer.mozilla.org/en-US/docs/Web/API/Blob): used to create local pages for testing on runtime
  
 __________________________
-#####Page: [https://rawgit.com/Lor-Saba/jsp/master/](https://rawgit.com/Lor-Saba/jsp/master/)
-
-__________________________
 #####How to use it:
  - _SAVE_: Save (whith a name) the current test-case into your browser `localStorage` ,
  - _OPEN_: the grey area on the left lists your saved test-cases, the white area on the right contain the test-case code to be loaded,
@@ -30,3 +27,5 @@ Copy-pase this code in the **LOAD** panel
 ```
 {"initialHtml":"%3Cdiv%20id%3D%22foo%22%3E%3C%2Fdiv%3E","preCase":"","postCase":"","cases":[{"name":"getElementById","code":"var%20el%20%3D%20document.getElementById(%22foo%22)%3B"},{"name":"querySelector","code":"var%20el%20%3D%20document.querySelector(%22%23foo%22)%3B"}]}
 ```
+__________________________
+###Page: [https://rawgit.com/Lor-Saba/jsp/master/](https://rawgit.com/Lor-Saba/jsp/master/)
