@@ -49,13 +49,13 @@
 		</div>
 
 		<div id="panel-save" class="test-panel">
-			<input class="code" placeholder="Type the name of this test to save." spellcheck="false"/>
+			<input class="code" placeholder="Type the name of this test-case to save." spellcheck="false"/>
 			<button class="btn" onclick="saveCurrentToStorage(this.parentElement.querySelector('input.code').value)">OK</button>
 		</div>
 
 		<div id="panel-load" class="test-panel">
 			<ul class="tests-list"></ul>
-			<textarea class="code" spellcheck="false"></textarea>
+			<textarea class="code" spellcheck="false" placeholder="Paste here your test-case code."></textarea>
 			<button class="btn" onclick="loadFromJson(this.parentElement.querySelector('textarea.code').value)">OK</button>
 		</div>
 	</div>
