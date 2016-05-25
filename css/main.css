@@ -46,16 +46,19 @@
 	background: #f4f4f4;
     position: relative;
     box-shadow: 0 0 0 1px rgba(0,0,0,.2);
+    min-width: 525px;
 }
 
 #test-controls{
 	text-align: center;
     margin-top: 15px;
     margin-bottom: 15px;
+    min-width: 525px;
 }
 
 #test-stuff{
 	padding: 15px;
+    min-width: 525px;
 }
 #test-stuff textarea.code{
 	margin: 0 0 -1px 0;
@@ -194,6 +197,9 @@
 .case[data-toggled="true"] textarea.code{
     display: none;
 }
+.case:not([data-toggled="true"]) i.fa-eye:before {
+    content: "\f070";
+}
 .case .title{
 	display: block;
 	width: 100%;
@@ -214,6 +220,11 @@
     border: 0px none;
 	box-shadow: inset 0px 0px 0px 1px #AAA;
 }
+.case button{
+	display: inline-block;
+    padding: 7px 10px;
+}
+
 input.code{
 	display: block;
 	width: 100%;
@@ -223,12 +234,14 @@ input.code{
     border: none;
 	box-shadow: 0px 0px 0px 1px #AAA;
 }
-
 textarea.code:focus{
     position: relative;
     z-index: 10;
 }
-.case button{
-	display: inline-block;
-    padding: 7px 10px;
+
+.spacer{
+    display: inline-block;
+    width: 10px;
+    height: 1px;
+    opacity: 0;
 }

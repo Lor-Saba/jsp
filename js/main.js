@@ -19,6 +19,26 @@
 		storage 		 = localStorage['jsb_tests'] ? JSON.parse(localStorage['jsb_tests']) : []; 
 		lastUrl 		 = null;
 		globalToggle	 = false;
+		
+		var hashUrl = location.hash.slice(1);
+		if (hashUrl.trim().length > 0){
+			if (hashUrl[0] === ":") 
+				hashUrl = "http://pastebin.com/raw/" +hashUrl.slice(1);
+			
+			loadFromUrl(hashUrl);
+		}
+	}
+	function loadFromUrl(_url){
+		var xhr = new XMLHttpRequest(_url)
+		    xhr.onload = function(_r){ 
+		    	try{
+		    		var json = JSON.parse( _r.target.responseText );
+		    		loadFromJson(json);
+		    	}
+		    	catch(_er){ }
+		    };
+		    xhr.open("GET", _url, true);
+		    xhr.send();
 	}
 	function removeNewLinesFromHTML(){ 
 
@@ -136,6 +156,7 @@
 		for(var ind = 0, els = elTestContainer.querySelectorAll('.case'), ln = els.length; ind < ln; ind++)
 			toggleCase(els[ind], globalToggle);
 			
+		// collapseArea('stuff', globalToggle);
 		window.scrollTo(0, document.body.scrollHeight);
 	}
 	function clearTest(){
@@ -147,10 +168,17 @@
 			globalToggle	 			= false;
 		}
 	}
-	function collapseArea(_name){
+	function collapseArea(_name, _force){
 		var elArea = document.querySelector('.collapse-'+_name);
-		if (elArea) 
-			elArea.style.display = elArea.style.display === "none" ? "block" : "none";
+		if (elArea) {
+			
+			var state = elArea.style.display === "none" ? "block" : "none";
+			if (_force !== undefined) 
+				state = !_force ? "block" : "none";
+				
+			elArea.style.display = state;
+			
+		}
 
 		return elArea;
 	}
