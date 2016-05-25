@@ -4,7 +4,8 @@
 		elTS_preCase,
 		elTS_postCase,
 		storage,
-		lastUrl;
+		lastUrl,
+		globalToggle;
 
 
 	function init(){
@@ -17,6 +18,7 @@
 		elTS_postCase 	 = document.querySelector('#test-stuff textarea.test-postcase') 	|| {};
 		storage 		 = localStorage['jsb_tests'] ? JSON.parse(localStorage['jsb_tests']) : []; 
 		lastUrl 		 = null;
+		globalToggle	 = false;
 	}
 	function removeNewLinesFromHTML(){ 
 
@@ -40,10 +42,11 @@
 
 				<input type="text" class="title" placeHolder="Title.." value="`+_title+`" spellcheck="false">
 				<textarea class="code" placeHolder="Code.." spellcheck="false">`+_code+`</textarea>
-				<button class="btn remove" 		title="Remove" 		onclick="removeTestCase(this.parentElement)"><i class="fa fa-times" aria-hidden="true"></i></button
+				<button  class="btn remove" 	title="Remove" 		onclick="removeTestCase(this.parentElement)"><i class="fa fa-times" aria-hidden="true"></i></button
 				><button class="btn reset"  	title="Reset" 		onclick="resetTestCase(this.parentElement)"><i class="fa fa-undo" aria-hidden="true"></i></button
 				><button class="btn move-up" 	title="Move UP" 	onclick="moveCase(this.parentElement, 'up')"><i class="fa fa-chevron-up" aria-hidden="true"></i></button
-				><button class="btn move-down" 	title="Move DOWN" 	onclick="moveCase(this.parentElement, 'down')"><i class="fa fa-chevron-down" aria-hidden="true"></i></button>
+				><button class="btn move-down" 	title="Move DOWN" 	onclick="moveCase(this.parentElement, 'down')"><i class="fa fa-chevron-down" aria-hidden="true"></i></button
+				><button class="btn toggle" 	title="Toggle" 	    onclick="toggleCase(this.parentElement)"><i class="fa fa-eye" aria-hidden="true"></i></button>
 
 			`;
 
@@ -120,6 +123,30 @@
 		&&  _el.nextElementSibling)
 			_el.parentElement.insertBefore(_el.nextElementSibling, _el);
 	}
+	function toggleCase(_el, _force){
+		var state = _el.getAttribute('data-toggled') === "true" ? false : true;
+		if (_force !== undefined) 
+			state = !!_force;
+			
+		_el.setAttribute('data-toggled', state);
+	}
+	function toggleCases(){
+		globalToggle = !globalToggle;
+		
+		for(var ind = 0, els = elTestContainer.querySelectorAll('.case'), ln = els.length; ind < ln; ind++)
+			toggleCase(els[ind], globalToggle);
+			
+		window.scrollTo(0, document.body.scrollHeight);
+	}
+	function clearTest(){
+		if (confirm("Are you sure to clear the current state of the test?")){
+			elTestContainer.innerHTML 	= '';
+			elTS_initialHtml.value 		= '';
+			elTS_preCase.value 			= '';
+			elTS_postCase.valu			= '';
+			globalToggle	 			= false;
+		}
+	}
 	function collapseArea(_name){
 		var elArea = document.querySelector('.collapse-'+_name);
 		if (elArea) 
@@ -164,7 +191,8 @@
 		for(var ind = 0, ln = storage.length; ind < ln; ind++){
 			var el = makeElement("<li data-index='"+ind+"'>"+storage[ind].name+"<span>&#10006;</span></li>");
 				el.ondblclick = function(){
-					loadFromStorage(this.getAttribute("data-index"))
+					loadFromStorage(this.getAttribute("data-index"));
+					document.querySelector('#panel-save input.code').value = storage[this.getAttribute("data-index")].name;
 				};
 				el.onclick = function(){
 					elLoadCode.value = JSON.stringify(getFromStorage(this.getAttribute("data-index")));
@@ -281,6 +309,7 @@
 				    background: #55d;
 				    transition: .5s;
 				    width: 0%;
+  					pointer-events: none;
 				}
 
 				.case{
@@ -329,6 +358,11 @@
 				    font-family: monospace;
 				    border-radius: 1px;
 				}
+				
+				.case .name:hover{
+    				text-decoration: underline;
+    				cursor: pointer;
+				}
 
 				[data-status="completed"] .case:hover .bar{ transition: .15s; opacity: .4; }
 
@@ -347,21 +381,29 @@
 
 			<script type="text/javascript">
 
-				var ___CTRL = (function(_fnsetup, _fnteardown){
+				var ___CTRL = (function(_Benchmark, _fnsetup, _fnteardown){
 
-					var suite = new Benchmark.Suite;
+					var suite = new _Benchmark.Suite;
 					var isRunning = false;
 					var initialized = false;
 
-					suite.on('complete', function(){
+					suite.on('complete', onComplete);
+					
+					function onComplete(){
 						isRunning = false;
-						console.log('Fastest is ' + this.filter('fastest').map('name'));
+						console.log('Fastest:', suite.filter('fastest'));
+						
 						document.getElementById('btn-runtest').removeAttribute('disabled');
-						suite.filter('fastest').map('elResult')[0].setAttribute('data-fastest', true);
-						suite.filter('slowest').map('elResult')[0].setAttribute('data-slowest', true);
 						document.body.setAttribute('data-status', 'completed');
-						makeChart();
-					});
+						
+						var maxTest = getMaxHZ(suite.filter('fastest'));
+						var minTest = getMinHZ(suite.filter('slowest'));
+						
+						if (maxTest) maxTest.elResult.setAttribute('data-fastest', true);
+						if (minTest) minTest.elResult.setAttribute('data-slowest', true);
+						
+						makeChart(true);
+					}
 
 					function addCommas(_num) { 
 						_num = (_num+'').split('.')[0];
@@ -373,6 +415,22 @@
 					    return _num;
 					}
 
+					function getMaxHZ(_arr){
+						var picked = null;
+						for(var ind = 0, ln = _arr.length, max = 0; ind < ln; ind++) 
+							if(max < _arr[ind].hz) picked = ind;
+						
+						return _arr[picked];
+					}
+
+					function getMinHZ(_arr){
+						var picked = null;
+						for(var ind = 0, ln = _arr.length, min = 999999999999999; ind < ln; ind++) 
+							if(min > _arr[ind].hz) picked = ind;
+						
+						return _arr[picked];
+					}
+
 					function buildResult(){
 
 						var elResultContainer = document.getElementById('test-result');
@@ -380,7 +438,11 @@
 							var elResult = document.createElement('div');
 								elResult.className = 'case';
 								elResult.setAttribute('title', decodeURIComponent( suite[ind].code ));
-								elResult.innerHTML = '<span class="bar"></span><span class="name">'+ suite[ind].name +'</span>';
+								elResult.innerHTML = '<span class="name" data-index="'+ind+'">'+ suite[ind].name +'</span><span class="bar"></span>';
+								elResult.querySelector('span.name').onclick = function(){
+									//suite[this.dataset.index].run({ async: true });
+								};
+							
 
 							suite[ind].elResult = elResult;
 							elResultContainer.appendChild(elResult);
@@ -408,18 +470,33 @@
 								els[ind].querySelector('.bar').style.width = "0%";
 							}
 
-							setTimeout(function(){ suite.run({ 'async': true }); }, 500);
+							setTimeout(function(){ suite.run({ async: true }); }, 500);
 							
 						}
 					}
 
-					function makeChart(){
+					function makeChart(_real){
 
-						var max = suite.filter('fastest').map('hz');
-						if (max.length) max = max[0];
+						var min = 0;
+						var max = 0;
+						
+						var maxTest = getMaxHZ(suite.filter('fastest'));
+						var minTest = getMinHZ(suite.filter('slowest'));
+						
+						if (maxTest) max = maxTest.hz;
+						if (minTest) min = minTest.hz;
+						
+						//var min = suite.filter('slowest').map('hz') || 0;
+						//var max = suite.filter('fastest').map('hz') || 0;
+						
+						//if (min.length) min = Math.min.apply(null, min);
+						//if (max.length) max = Math.max.apply(null, max);
+						if (_real) min = 0;
+						
+						max -= min;
 
 						for(var ind = 0, ln = suite.length; ind < ln; ind++)
-							suite[ind].elResult.querySelector('.bar').style.width = (suite[ind].hz * 100 /max)+"%";				
+							suite[ind].elResult.querySelector('.bar').style.width = ((suite[ind].hz - min) * 100 /max)+"%";				
 					}
 
 					return {
@@ -439,10 +516,12 @@
 							document.getElementById('btn-runtest').style.display = "block";
 							document.getElementById('btn-runtest').onclick = run;
 							initialized = true;
-						}
+						},
+						makeChart: function(_real){ makeChart(_real); },
+						get tests(){ return suite; }
 					};
 
-				}(function(_ev){ `+elTS_preCase.value +` }, function(_ev){ `+elTS_postCase.value+` }));
+				}(Benchmark, function(_ev){ `+elTS_preCase.value +` }, function(_ev){ `+elTS_postCase.value+` }));
 
 				`+
 				(function(){

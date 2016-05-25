@@ -135,10 +135,12 @@
 .btn.btn-primary{
     background: linear-gradient(180deg, #77e, #55d);
     text-shadow: 0 1px rgba(0,0,0,.3);
+    z-index: 10;
     color: #fff;
 }
 .btn.btn-primary:hover{
     box-shadow: inset 0 0 0 1px rgba(0,0,0,.5), inset 0 0 0 100px rgba(0,0,0,.1);
+    z-index: 11;
 }
 
 .center{
@@ -176,6 +178,21 @@
 	position: relative;
 	display: block;
 	padding: 15px;
+}
+.case:not(:first-child){
+    box-shadow: inset 0 1px #ddd;
+}
+.case[data-toggled="true"] .title{
+    display: inline-block;
+    width: calc( 100% - 155px);
+    background: transparent;
+    box-shadow: none;
+    float: right;
+    outline: none;
+    pointer-events: none;
+}
+.case[data-toggled="true"] textarea.code{
+    display: none;
 }
 .case .title{
 	display: block;

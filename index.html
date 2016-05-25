@@ -28,17 +28,19 @@
 		<div id="test-stuff" class='center'>
 			<a class="collapse-toggler" href="javascript:void(0);" onclick="collapseArea('stuff');">Show / Hide setup area..</a>
 			<div class="collapsable collapse-stuff">
-				<textarea class="code test-initialhtml" placeholder="HTML code compiled inside the <body> at the beginning" spellcheck="false"></textarea>
-				<textarea class="code test-precase" 	placeholder="JAVASCRIPT code compiled/called before each test loop" spellcheck="false"></textarea>
-				<textarea class="code test-postcase" 	placeholder="JAVASCRIPT code compiled/called after each test loop"  spellcheck="false"></textarea>
+				<textarea spellcheck="false" class="code test-initialhtml" 	placeholder="HTML code compiled inside the <body> at the beginning" title="HTML code compiled inside the <body> at the beginning"></textarea>
+				<textarea spellcheck="false" class="code test-precase" 		placeholder="JAVASCRIPT code compiled/called before each test loop" title="JAVASCRIPT code compiled/called before each test loop"></textarea>
+				<textarea spellcheck="false" class="code test-postcase" 	placeholder="JAVASCRIPT code compiled/called after each test loop"  title="JAVASCRIPT code compiled/called after each test loop" ></textarea>
 			</div>
 		</div>
 		<div id="test-container" class='center'></div>
 		<div id="test-controls" class='center'>
 			<button class="btn" onclick="showPanel('save');">SAVE</button>
 			<button class="btn" onclick="buildLoad();">LOAD</button>
-			|
 			<button class="btn" onclick="buildExport();">EXPORT</button>
+			|
+			<button class="btn" onclick="toggleCases();">TOGGLE</button>
+			<button class="btn" onclick="clearTest();">CLEAR</button>
 			|
 			<button class="btn" onclick="addTestCase();">ADD</button>
 			<button class="btn btn-primary" onclick="runTests();">RUN</button>
@@ -67,3 +69,11 @@
 
 
 
+<!--
+
+	TODO: 
+		- avvio di un test singolo cliccando sul nome del blocco
+		- visualizzazione del codice di un blocco con ctrl + l.click
+		- 
+
+-->
