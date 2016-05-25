@@ -2,10 +2,10 @@
 __________________________
 
 #####Long story short: 
-[JsPerf](https://jsperf.com/) is offline since ~2 or more months now so, the need to test codes led me to build a small jsperf-like application for myself to use until jsperf will comeback in [v2](https://github.com/jsperf/jsperf.com)
+[JsPerf](https://jsperf.com/) as of now (May 2016) the website is offline since 2 months or more so, the need to test codes led me to build this small jsperf-like application to use until jsperf will comeback in [v2](https://github.com/jsperf/jsperf.com)
 
 I didn't add a database to store the test-case created (since it was the jsperf's main problem), 
-Instead I choose to save the current test-case in `localStorage` and the ability to **export** it. 
+Instead I choosed to save the current test-case in `localStorage` and the ability to **export** it. 
 
 __________________________
 #####What I used:
@@ -14,11 +14,11 @@ __________________________
  
 __________________________
 #####How to use it:
- - _SAVE_: Save (whith a name) the current test-case into your browser `localStorage` ,
- - _OPEN_: the grey area on the left lists your saved test-cases, the white area on the right contain the test-case code to be loaded,
+ - _SAVE_: Save (with a name) the current test-case into your browser `localStorage`;
+ - _OPEN_: the gray area lists the saved test cases, the white area on the right contains the code of test-case to be loaded;
  - _EXPORT_: Give the current test-case code, ready to be copy-pasted where you need it,
- - _ADD_: Insert a case-block. (the title must be >=3 char long)  you can remove, reset (clean the inputs, move up-down the case-block using his buttons list)
- - _RUN_: generate and open the test-page where you can run the test-case.
+ - _ADD_: Insert a case-block. The block can be removed, resetted and moved up and down and the title is required to be more than 2 characters long;
+ - _RUN_: generates and opens the page that is used to run the test cases.
 
 
 __________________________
