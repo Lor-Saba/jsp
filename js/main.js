@@ -22,13 +22,29 @@
 		
 		var hashUrl = location.hash.slice(1);
 		if (hashUrl.trim().length > 0){
-			if (hashUrl[0] === ":") 
-				hashUrl = "http://pastebin.com/raw/" +hashUrl.slice(1);
+			//if (hashUrl[0] === ":") 
+			//	hashUrl = "http://pastebin.com/raw/" +hashUrl.slice(1);
 			
 			loadFromUrl(hashUrl);
 		}
 	}
 	function loadFromUrl(_url){
+		
+		var xhr = new XMLHttpRequest();
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		    xhr.onload = function(_r){ 
+		    	try{
+		    		var json = JSON.parse( _r.target.responseText );
+		    		if (json.error) console.error(json);
+		    		
+		    		loadFromJson(json);
+		    	}
+		    	catch(_er){ }
+		    };
+		    xhr.open("GET", 'get-pbraw.php?pbid='+_url, true);
+		    xhr.send();
+		    
+		/*
 		var xhr = new XMLHttpRequest(_url)
 		    xhr.onload = function(_r){ 
 		    	try{
@@ -39,6 +55,7 @@
 		    };
 		    xhr.open("GET", _url, true);
 		    xhr.send();
+		*/
 	}
 	function removeNewLinesFromHTML(){ 
 

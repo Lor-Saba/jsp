@@ -1,6 +1,6 @@
 <?php ob_start();
 	
-	$pbid = (string)filter_input(INPUT_POST, 'pbid');
+	$pbid = (string)filter_input(INPUT_GET, 'pbid');
 
 	if (preg_match("/[^\w]/", $pbid)) die('{error:"Invalid ID!"}');
 
