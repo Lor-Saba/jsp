@@ -31,19 +31,22 @@
 	function loadFromUrl(_url){
 		
 		var xhr = new XMLHttpRequest();
-		    xhr.onload = function(_r){ 
+		    xhr.onload = xhr.onloadend = function(_r){ 
 		    	try{
 		    		var json = JSON.parse( _r.target.responseText );
 		    		if (json.error) console.error(json);
 		    		
 		    		loadFromJson(json);
 		    	}
-		    	catch(_er){ }
+		    	catch(_er){
+		    		console.log(_er);
+		    	}
+		    };
+		    xhr.onerror = function(_r){ 
+		    	console.log(arguments);
 		    };
 		    
-		    xhr.open("GET", 'get-pbraw.php?pbid='+_url, true);
-		    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		    
+		    xhr.open("GET", "get-pbraw.php?pbid="+_url, true);
 		    xhr.send();
 		    
 		/*
