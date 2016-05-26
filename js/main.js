@@ -31,7 +31,6 @@
 	function loadFromUrl(_url){
 		
 		var xhr = new XMLHttpRequest();
-			// xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		    xhr.onload = function(_r){ 
 		    	try{
 		    		var json = JSON.parse( _r.target.responseText );
@@ -41,7 +40,10 @@
 		    	}
 		    	catch(_er){ }
 		    };
+		    
 		    xhr.open("GET", 'get-pbraw.php?pbid='+_url, true);
+		    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		    
 		    xhr.send();
 		    
 		/*
