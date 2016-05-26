@@ -31,7 +31,6 @@
 	function loadFromUrl(_url){
 		
 		var xhr = new XMLHttpRequest();
-			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		    xhr.onload = function(_r){ 
 		    	try{
 		    		var json = JSON.parse( _r.target.responseText );
