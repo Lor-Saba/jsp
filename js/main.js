@@ -307,6 +307,9 @@
 			<script type="text/javascript" src="https://rawgit.com/bestiejs/benchmark.js/2.1.0/benchmark.js"></script>
 			
 			<style>
+				* {
+				    box-sizing: border-box;
+				}
 
 				#test-output{
 					max-width:  100vw;
@@ -354,11 +357,35 @@
 				    font-weight: normal;
 				    font-style: oblique;
 				}
+				
+				.center{
+					max-width: 600px;
+				    display: table;
+				    width: 100%;
+				    margin: auto;
+				}
 
+				.btn{
+				    background: linear-gradient(180deg, #fff, #eee);
+				    color: #333;
+				    padding: 8px 14px;
+				    border-radius: 1px;   
+				    margin-right: -1px;
+				    border: 0;
+				    box-shadow: inset 0 0 0 1px rgba(0,0,0,.3);
+				    outline: none !important;
+				    cursor: pointer;
+				    position: relative;
+				}
+				.btn:hover{
+				    box-shadow: inset 0 0 0 1px rgba(0,0,0,.5), inset 0 0 0 100px rgba(255,255,255,.1);
+				    z-index: 1;
+				}
+				
 				.bar{
 				    position: absolute;
-				    bottom: 1px;
-				    height: calc( 100% - 2px);
+				    top: 1px;
+				    height: 24px;
 				    opacity: 0.2;
 				    left: 0;
 				    background: #55d;
@@ -377,6 +404,7 @@
 					_box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
 					color: #000;
 				}
+				.case[data-showcode="true"] code{ display: block; }
 				.case[data-slowest="true"]::after { background: #faa; box-shadow: 0 0 0 1px #fff; }
 				.case[data-fastest="true"]::after { background: #afa; box-shadow: 0 0 0 1px #fff; }
 				.case[data-error="true"] { color: #aaa; }
@@ -405,6 +433,7 @@
 				.case::after {
 				    content: attr(data-count);
 				    position: absolute;
+					top: 4px;
 				    right: 4px;
 				    background: #fff;
 				    color: #333;
@@ -420,11 +449,19 @@
 				    font-weight: 900;
 				    padding: 1px 2px;
 				}
-				
 				.case .name:hover{
     				text-decoration: underline;
     				cursor: pointer;
 				}
+				.case code{
+					position: relative;
+				    display: none;
+				    width: 100%;
+				    padding: 5px 10px;
+				    margin: 5px 0;
+    				border: 1px solid rgba(0,0,0,.2);
+				}
+				
 				.message-error {
 				    color: #e44;
 				    text-align: center;
@@ -451,7 +488,11 @@
 			<div id="test-result">
 				<div class="message-error">An error occurred while building the test.</div>
 			</div>
-			<button id="btn-runtest">RUN</button>
+			<div>
+				<button class="btn" id="btn-runtest">RUN</button>
+				<a href="javascript:void(0);" id="btn-toggleCodes">Show/hide codes</a>
+			</div>
+			
 
 			<script type="text/javascript">
 
@@ -531,7 +572,7 @@
 							var elResult = document.createElement('div');
 								elResult.className = 'case';
 								elResult.setAttribute('title', decodeURIComponent( suite[ind].code ));
-								elResult.innerHTML = '<span class="name" data-index="'+ind+'">'+ suite[ind].name +'</span><span class="bar"></span>';
+								elResult.innerHTML = '<span class="name" data-index="'+ind+'">'+ suite[ind].name +'</span><span class="bar"></span><code>'+decodeURIComponent( suite[ind].code )+'</code>';
 								elResult.querySelector('span.name').onclick = function(){
 									//suite[this.dataset.index].run({ async: true });
 								};
@@ -587,6 +628,15 @@
 						for(var ind = 0, ln = suite.length; ind < ln; ind++)
 							suite[ind].elResult.querySelector('.bar').style.width = ((suite[ind].hz - min) * 100 /max)+"%";				
 					}
+					
+					function toggleCodeVisibility(){
+						if (isRunning) return;
+						toggleCodeVisibility.state = !toggleCodeVisibility.state;
+					
+						for(var ind = 0, els = document.querySelectorAll('#test-result .case'), ln = els.length; ind < ln; ind++)
+							els[ind].setAttribute("data-showcode", toggleCodeVisibility.state);
+						
+					}
 
 					return {
 						addCase: function(_name, _fn, _fnc){
@@ -601,10 +651,24 @@
 						},
 						init: function(){
 							if (initialized) return;
+								initialized = true;
+							
 							buildResult();
 							document.getElementById('btn-runtest').style.display = "block";
 							document.getElementById('btn-runtest').onclick = run;
-							initialized = true;
+							document.getElementById('btn-toggleCodes').onclick = toggleCodeVisibility;
+							
+							window.addEventListener("click", function(_e){
+						
+								if (isRunning === false
+								&&  _e.target.className === 'name' 
+								&&  _e.target.parentElement.className === 'case' ){ 
+									_e.target.parentElement.setAttribute( 
+										'data-showcode',
+										_e.target.parentElement.getAttribute('data-showcode') === 'true' ? 'false' : 'true'
+									);
+								}
+							});
 						},
 						makeChart: function(_real){ makeChart(_real); },
 						get tests(){ return suite; }
