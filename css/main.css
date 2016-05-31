@@ -186,7 +186,7 @@
 }
 .case[data-toggled="true"] .title{
     display: inline-block;
-    width: calc( 100% - 155px);
+    width: calc( 100% - 160px);
     background: transparent;
     box-shadow: none;
     float: right;
@@ -222,6 +222,10 @@
 .case button{
 	display: inline-block;
     padding: 7px 10px;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    text-align: center;
 }
 
 input.code{

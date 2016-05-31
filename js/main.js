@@ -21,12 +21,17 @@
 		globalToggle	 = false;
 		
 		var hashUrl = location.hash.slice(1);
-		if (hashUrl.trim().length > 0){
-			//if (hashUrl[0] === ":") 
-			//	hashUrl = "http://pastebin.com/raw/" +hashUrl.slice(1);
-			
+		if (hashUrl.trim().length > 0)
 			loadFromUrl(hashUrl);
-		}
+		
+		window.addEventListener("mouseup", function(_e){
+	
+			var found = parents(_e.target, function(_el){ 
+				return _el.className === "test-panel";
+			});
+	
+			if (!found) hidePanels();
+		});
 	}
 	function loadFromUrl(_url){
 		
@@ -372,7 +377,7 @@
 					_box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
 					color: #000;
 				}
-				.case[data-slowest="true"]::after { background: #faa; }
+				.case[data-slowest="true"]::after { background: #faa; box-shadow: 0 0 0 1px #fff; }
 				.case[data-fastest="true"]::after { background: #afa; box-shadow: 0 0 0 1px #fff; }
 				.case[data-error="true"] { color: #aaa; }
 				.case[data-error="true"]::before {
@@ -400,7 +405,7 @@
 				.case::after {
 				    content: attr(data-count);
 				    position: absolute;
-				    right: 6px;
+				    right: 4px;
 				    background: #fff;
 				    color: #333;
 				    padding: 1px 6px 0;
@@ -408,10 +413,24 @@
 				    font-family: monospace;
 				    border-radius: 1px;
 				}
+				.case[data-error="true"]::after {
+				    content: 'ERROR';
+				    z-index: 100;
+				    color: #e55;
+				    font-weight: 900;
+				    padding: 1px 2px;
+				}
 				
 				.case .name:hover{
     				text-decoration: underline;
     				cursor: pointer;
+				}
+				.message-error {
+				    color: #e44;
+				    text-align: center;
+				    font-family: monospace;
+				    transition: .2s;
+				    animation: show-error 2s linear;   
 				}
 
 				[data-status="completed"] .case:hover .bar{ transition: .15s; opacity: .4; }
@@ -420,13 +439,18 @@
 				    0%   {background-position: 0    0;} 
 				    100% {background-position: 60px 0;}
 				}
+				@keyframes show-error {
+			        0%   {opacity: 0;}
+			        80%  {opacity: 0;}
+			        100% {opacity: 1;}
+				}
 			</style>
 
 			<div id="jsp-head"><div id="jsp-logo">JS</div></div>
-
 			<div id="test-output">`+document.querySelector('#test-stuff .code').value+`</div>
-
-			<div id="test-result"></div>
+			<div id="test-result">
+				<div class="message-error">An error occurred while building the test.</div>
+			</div>
 			<button id="btn-runtest">RUN</button>
 
 			<script type="text/javascript">
@@ -436,6 +460,7 @@
 					var suite = new _Benchmark.Suite;
 					var isRunning = false;
 					var initialized = false;
+					var minMax = [0,0];
 
 					suite.on('complete', onComplete);
 					
@@ -446,13 +471,30 @@
 						document.getElementById('btn-runtest').removeAttribute('disabled');
 						document.body.setAttribute('data-status', 'completed');
 						
-						var maxTest = getMaxHZ(suite.filter('fastest'));
-						var minTest = getMinHZ(suite.filter('slowest'));
+						calcMinMax();
+						
+						var minTest = suite[minMax[0]];
+						var maxTest = suite[minMax[1]];
 						
 						if (maxTest) maxTest.elResult.setAttribute('data-fastest', true);
 						if (minTest) minTest.elResult.setAttribute('data-slowest', true);
 						
 						makeChart(true);
+					}
+					
+					function calcMinMax(){
+						if (suite.length < 1) return null; 
+						
+						var min = [Number.MAX_SAFE_INTEGER, -1];
+						var max = [Number.MIN_SAFE_INTEGER, -1];
+						
+						for(var ind = 0, ln = suite.length; ind < ln; ind++){ 
+							if(!suite[ind].error && max[0] < suite[ind].hz) {max[0] = suite[ind].hz; max[1] = ind;}
+							if(!suite[ind].error && min[0] > suite[ind].hz) {min[0] = suite[ind].hz; min[1] = ind;}
+						}
+						
+						minMax = [min[1], max[1]];
+						return minMax;
 					}
 
 					function addCommas(_num) { 
@@ -484,6 +526,7 @@
 					function buildResult(){
 
 						var elResultContainer = document.getElementById('test-result');
+							elResultContainer.innerHTML = '';
 						for(var ind = 0, ln = suite.length; ind < ln; ind++){
 							var elResult = document.createElement('div');
 								elResult.className = 'case';
@@ -530,18 +573,14 @@
 						var min = 0;
 						var max = 0;
 						
-						var maxTest = getMaxHZ(suite.filter('fastest'));
-						var minTest = getMinHZ(suite.filter('slowest'));
+						calcMinMax();
+						
+						var minTest = suite[minMax[0]];
+						var maxTest = suite[minMax[1]];
 						
 						if (maxTest) max = maxTest.hz;
 						if (minTest) min = minTest.hz;
-						
-						//var min = suite.filter('slowest').map('hz') || 0;
-						//var max = suite.filter('fastest').map('hz') || 0;
-						
-						//if (min.length) min = Math.min.apply(null, min);
-						//if (max.length) max = Math.max.apply(null, max);
-						if (_real) min = 0;
+						if (_real)   min = 0;
 						
 						max -= min;
 
@@ -606,12 +645,3 @@
 		while (_el) if (_fn(_el)) return _el;
 					else _el = _el.parentElement;
 	}
-
-	window.addEventListener("mouseup", function(_e){
-
-		var found = parents(_e.target, function(_el){ 
-			return _el.className === "test-panel";
-		});
-
-		if (!found) hidePanels();
-	});
