@@ -404,7 +404,7 @@
 					_box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
 					color: #000;
 				}
-				.case[data-showcode="true"] code{ display: block; }
+				.case[data-showcode="true"] pre{ display: block; }
 				.case[data-slowest="true"]::after { background: #faa; box-shadow: 0 0 0 1px #fff; }
 				.case[data-fastest="true"]::after { background: #afa; box-shadow: 0 0 0 1px #fff; }
 				.case[data-error="true"] { color: #aaa; }
@@ -453,7 +453,7 @@
     				text-decoration: underline;
     				cursor: pointer;
 				}
-				.case code{
+				.case pre{
 					position: relative;
 				    display: none;
 				    width: 100%;
@@ -572,7 +572,7 @@
 							var elResult = document.createElement('div');
 								elResult.className = 'case';
 								elResult.setAttribute('title', decodeURIComponent( suite[ind].code ));
-								elResult.innerHTML = '<span class="name" data-index="'+ind+'">'+ suite[ind].name +'</span><span class="bar"></span><code>'+decodeURIComponent( suite[ind].code )+'</code>';
+								elResult.innerHTML = '<span class="name" data-index="'+ind+'">'+ suite[ind].name +'</span><span class="bar"></span><pre>'+decodeURIComponent( suite[ind].code )+'</pre>';
 								elResult.querySelector('span.name').onclick = function(){
 									//suite[this.dataset.index].run({ async: true });
 								};
