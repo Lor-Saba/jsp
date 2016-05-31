@@ -2,7 +2,7 @@
 __________________________
 
 #####Long story short: 
-As of now (May 2016) [JsPerf](https://jsperf.com/)  is offline since 2 months or more so, the need to test codes led me to build this small jsperf-like application to use until jsperf will comeback in [v2](https://github.com/jsperf/jsperf.com)
+As of now (May 2016) it's like 2 months or more now that [JsPerf](https://jsperf.com/) is offline.. so, the need to test codes led me to build this small jsperf-like application to use until jsperf will comeback in [v2](https://github.com/jsperf/jsperf.com)
 
 I didn't add a database to store the test-case created (since it was the jsperf's main problem), 
 Instead I choosed to save the current test-case in `localStorage` and the ability to **export** it. 
