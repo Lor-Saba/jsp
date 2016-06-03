@@ -7,13 +7,14 @@
 		lastUrl,
 		globalToggle;
 
-
 	function init(){
 
 		removeNewLinesFromHTML();
 
+		//ace.require("ace/ext/language_tools");
+		
 		elTestContainer  = document.getElementById('test-container');
-		elTS_initialHtml = document.querySelector('#test-stuff textarea.test-initialhtml') 	|| {};
+		elTS_initialHtml = document.querySelector('#test-stuff textarea.test-initialhtml') 	|| {};  // newEditor(document.querySelector('#test-stuff div.test-initialhtml'), "html");
 		elTS_preCase 	 = document.querySelector('#test-stuff textarea.test-precase') 		|| {};
 		elTS_postCase 	 = document.querySelector('#test-stuff textarea.test-postcase') 	|| {};
 		storage 		 = localStorage['jsb_tests'] ? JSON.parse(localStorage['jsb_tests']) : []; 
@@ -32,20 +33,57 @@
 	
 			if (!found) hidePanels();
 		});
+		window.addEventListener("keydown", function(_e){
+	
+			if (_e.keyCode === 83 && _e.ctrlKey){
+				_e.preventDefault();
+				
+				saveCurrentToStorage(document.querySelector('#panel-save input.code').value);
+			}
+		});
+	}
+	function newEditor(_el, _type){
+		_type = _type ? _type : "javascript";
+
+	    var editor = ace.edit(_el);
+		    editor.setTheme("ace/theme/chrome");
+		    editor.getSession().setMode("ace/mode/"+_type);
+		    editor.setPrintMarginColumn(false)
+		    editor.renderer.setShowGutter(false);
+		    editor.setOptions({
+	    		enableBasicAutocompletion: true
+			});
+
+		var returnData = {
+			get el(){ return _el; },
+			get editor(){ return editor; },
+			get value(){ return editor.getValue(); },
+			set value(_text){
+				editor.setValue(typeof _text === "string" ? _text : "");
+			},
+			destroy: function(){
+				editor.removeAllListeners();
+				editor.destroy();
+				//editor.container.remove();
+
+				while (_el.firstChild) 
+    				   _el.removeChild(_el.firstChild);
+			}
+		};
+
+		return returnData;
 	}
 	function loadFromUrl(_url){
 		
 		var xhr = new XMLHttpRequest();
-		    xhr.onload = xhr.onloadend = function(_r){ 
+		    xhr.onload = function(_r){ 
 		    	try{
 		    		var json = JSON.parse( _r.target.responseText );
 		    		if (json.error) console.error(json);
 		    		
 		    		loadFromJson(json);
 		    	}
-		    	catch(_er){
-		    		console.log(_er);
-		    	}
+		    	catch(_er){ }
 		    };
 		    xhr.onerror = function(_r){ 
 		    	console.log(arguments);
@@ -54,18 +92,6 @@
 		    xhr.open("GET", "get-pbraw.php?pbid="+_url, true);
 		    xhr.send();
 		    
-		/*
-		var xhr = new XMLHttpRequest(_url)
-		    xhr.onload = function(_r){ 
-		    	try{
-		    		var json = JSON.parse( _r.target.responseText );
-		    		loadFromJson(json);
-		    	}
-		    	catch(_er){ }
-		    };
-		    xhr.open("GET", _url, true);
-		    xhr.send();
-		*/
 	}
 	function removeNewLinesFromHTML(){ 
 
@@ -120,7 +146,11 @@
 			}
 
 			saveStorage();
-		}		
+		}
+		else{ 
+			showPanel('save');
+			alert('Type a valid name to save the current test.');
+		}
 	}
 	function loadFromStorage(_ind){
 		var test = getFromStorage(_ind);
@@ -294,7 +324,7 @@
 			if (elsCases[ind].querySelector(".title").value.length > 2
 			&&  elsCases[ind].querySelector(".code").value.length > 0)
 				casesList.push({
-					name: elsCases[ind].querySelector(".title").value,
+					name: elsCases[ind].querySelector(".title").value.replace(/(<([^>]+)>)/ig,""),
 					code: encodeURIComponent( elsCases[ind].querySelector(".code").value )
 				});
 		}
@@ -435,7 +465,7 @@
 				    position: absolute;
 					top: 4px;
 				    right: 4px;
-				    background: #fff;
+				    _background: #fff;
 				    color: #333;
 				    padding: 1px 6px 0;
 				    margin-top: 1px;
@@ -460,6 +490,9 @@
 				    padding: 5px 10px;
 				    margin: 5px 0;
     				border: 1px solid rgba(0,0,0,.2);
+				    word-break: break-word;
+				    word-wrap: break-word;
+				    white-space: pre-wrap;
 				}
 				
 				.message-error {
@@ -484,7 +517,7 @@
 			</style>
 
 			<div id="jsp-head"><div id="jsp-logo">JS</div></div>
-			<div id="test-output">`+document.querySelector('#test-stuff .code').value+`</div>
+			<div id="test-output">`+elTS_initialHtml.value+/* document.querySelector('#test-stuff .code').value+*/`</div>
 			<div id="test-result">
 				<div class="message-error">An error occurred while building the test.</div>
 			</div>
@@ -495,7 +528,7 @@
 			
 
 			<script type="text/javascript">
-
+				
 				var ___CTRL = (function(_Benchmark, _fnsetup, _fnteardown){
 
 					var suite = new _Benchmark.Suite;
@@ -572,7 +605,7 @@
 							var elResult = document.createElement('div');
 								elResult.className = 'case';
 								elResult.setAttribute('title', decodeURIComponent( suite[ind].code ));
-								elResult.innerHTML = '<span class="name" data-index="'+ind+'">'+ suite[ind].name +'</span><span class="bar"></span><pre>'+decodeURIComponent( suite[ind].code )+'</pre>';
+								elResult.innerHTML = '<span class="bar"></span><span class="name" data-index="'+ind+'">'+ suite[ind].name +'</span><pre>'+decodeURIComponent( suite[ind].code )+'</pre>';
 								elResult.querySelector('span.name').onclick = function(){
 									//suite[this.dataset.index].run({ async: true });
 								};
