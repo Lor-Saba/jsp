@@ -115,7 +115,7 @@
 
 				<input type="text" class="title" placeHolder="Title.." value="`+_title+`" spellcheck="false">
 				<textarea class="code" placeHolder="Code.." spellcheck="false">`+_code+`</textarea>
-				<button  class="btn remove" 	title="Remove" 		onclick="removeTestCase(this.parentElement)"><i class="fa fa-times" aria-hidden="true"></i></button
+				<button  class="btn remove" 	title="Remove" 		onclick="removeTestCase(this)"><i class="fa fa-times" aria-hidden="true"></i><label>Confirm?</label></button
 				><button class="btn reset"  	title="Reset" 		onclick="resetTestCase(this.parentElement)"><i class="fa fa-undo" aria-hidden="true"></i></button
 				><button class="btn move-up" 	title="Move UP" 	onclick="moveCase(this.parentElement, 'up')"><i class="fa fa-chevron-up" aria-hidden="true"></i></button
 				><button class="btn move-down" 	title="Move DOWN" 	onclick="moveCase(this.parentElement, 'down')"><i class="fa fa-chevron-down" aria-hidden="true"></i></button
@@ -183,8 +183,15 @@
 		catch(_ex){}
 	}
 	function removeTestCase(_el){
-
-		elTestContainer.removeChild(_el);
+		
+		if (_el.getAttribute('data-confirm') != "true"){
+			_el.setAttribute('data-confirm', true);
+			_el.onmouseleave = function(){
+				_el.setAttribute('data-confirm', false);
+			}
+		}
+		else 
+			elTestContainer.removeChild(_el.parentElement);
 	}
 	function resetTestCase(_el){
 		_el.querySelector(".title").value = '';
@@ -456,9 +463,10 @@
 				                      transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
 				                      transparent 75%, transparent);            
 				    
-					box-shadow: inset 0 0 0 1px rgba(0,0,0,.1);
+					box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
 				    animation: animate-stripes 1s linear infinite;   
 					color: #fff;
+    				border-radius: 2px;
 				}
 				.case::after {
 				    content: attr(data-count);
