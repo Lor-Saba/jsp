@@ -2,14 +2,12 @@
 __________________________
 
 #####Long story short: 
-As of now (May 2016) it's like 2 months or more now that [JsPerf](https://jsperf.com/) is offline.. so, the need to test codes led me to build this small jsperf-like application to use until jsperf will comeback in [v2](https://github.com/jsperf/jsperf.com)
+It's been a while now that [JsPerf](https://jsperf.com/) is gone offline.. so, the need to test codes led me to build this small jsperf-like application to use until JsPerf will comeback in [v2](https://github.com/jsperf/jsperf.com)
 
-I didn't add a database to store the test-case created (since it was the jsperf's main problem), 
-Instead I choosed to save the current test-case in `localStorage` and the ability to **export** it. 
 
 __________________________
 #####What I used:
- - [benchmarkjs](https://benchmarkjs.com/): which sould be used by jsperf too
+ - [benchmarkjs](https://benchmarkjs.com/): which sould be used by JsPerf too
  - [Blob pages](https://developer.mozilla.org/en-US/docs/Web/API/Blob): used to create local pages for testing on runtime
  
 __________________________
@@ -20,6 +18,11 @@ __________________________
  - _ADD_: Insert a case-block. The block can be removed, resetted and moved up and down and the title is required to be more than 2 characters long;
  - _RUN_: generates and opens the page that is used to run the test cases.
 
+__________________________
+#####How to share:
+
+I didn't add a database to store the test-case created since it was the JsPerf's main problem and because it wasn't my primary goal. 
+Instead I chose to save everything into the `localStorage` and the ability to **export** it.  (and then share it as i did below in the "Example")
 
 __________________________
 #####Example:
