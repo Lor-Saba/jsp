@@ -7,8 +7,8 @@ It's been a while now that [JsPerf](https://jsperf.com/) is gone offline.. so, t
 
 __________________________
 #####What I used:
- - [benchmarkjs](https://benchmarkjs.com/): which sould be used by JsPerf too
- - [Blob pages](https://developer.mozilla.org/en-US/docs/Web/API/Blob): used to create local pages for testing on runtime
+ - [benchmarkjs](https://benchmarkjs.com/): which is used by JsPerf too
+ - [Blob pages](https://developer.mozilla.org/en-US/docs/Web/API/Blob): used to create local sub-pages for testing
  
 __________________________
 #####How to use it:
