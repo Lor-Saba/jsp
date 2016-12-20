@@ -89,7 +89,8 @@
 		    	console.log(arguments);
 		    };
 		    
-		    xhr.open("GET", "get-pbraw.php?pbid="+_url, true);
+		    //xhr.open("GET", "get-pbraw.php?pbid="+_url, true);
+		    xhr.open("GET", "get-pastebin.php?pbid="+_url, true);
 		    xhr.send();
 		    
 	}
@@ -328,7 +329,7 @@
 
 		var elsCases = document.querySelectorAll('.case');
 		for(var ind = 0, ln = elsCases.length; ind < ln; ind++){
-			if (elsCases[ind].querySelector(".title").value.length > 2
+			if (elsCases[ind].querySelector(".title").value.length > 0  //  <-- 2
 			&&  elsCases[ind].querySelector(".code").value.length > 0)
 				casesList.push({
 					name: elsCases[ind].querySelector(".title").value.replace(/(<([^>]+)>)/ig,""),
@@ -530,7 +531,7 @@
 				<div class="message-error">An error occurred while building the test.</div>
 			</div>
 			<div>
-				<button class="btn" id="btn-runtest">RUN</button>
+				<button class="btn" id="btn-runtest">RUN</button><br>
 				<a href="javascript:void(0);" id="btn-toggleCodes">Show/hide codes</a>
 			</div>
 			
@@ -744,7 +745,7 @@
 		lastUrl = URL.createObjectURL(blob);
 
 		window.open(lastUrl, '_blank');
-		console.log(lastUrl);
+		console.info('Test page running on:', lastUrl);
 	}
 	function parents(_el, _fn){
 		while (_el) if (_fn(_el)) return _el;
